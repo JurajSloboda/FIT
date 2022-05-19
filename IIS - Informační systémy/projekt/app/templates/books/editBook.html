@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block app_content %}
+    <h1>Edit Library</h1>
+    {{ wtf.quick_form(bookEditForm) }}
+
+    {{ckeditor.load()}}
+    {{ckeditor.config(name='description')}}
+    
+{% endblock %}

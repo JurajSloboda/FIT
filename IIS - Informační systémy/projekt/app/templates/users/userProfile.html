@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+
+{%block app_content %}
+    <div class="profile-div">
+        <h1>
+            {{user.username}}'s Profile
+        </h1>
+
+        <p>
+            <b>Name: </b>{{user.username}}
+        </p>
+
+        <p>
+            <b>Description:</b><br>
+            {{user.profile_desc|safe}}
+        </p>
+
+        
+        {%if user.isLibrarian() %}
+            <p>
+                <b>Librarian Of:</b><br>
+                {{user.getLibraryName()}}
+            </p>
+        {%endif%}
+        <br>
+        {%if user == current_user or current_user.isAdmin() %}
+            <p><a href="{{url_for('users.editUserProfile', username=user.username)}}">Edit profile</a></p>
+            <p><a href="{{url_for('users.changePassword', username=user.username)}}">Change password</a></p>
+            <p><a href="{{url_for('users.deleteUser', username=user.username)}}">Delete this user</a></p>
+        {%endif%}
+
+        {%if current_user.isAdmin() and user.isLibrarian() %}
+            <p><a href="{{url_for('users.addLibrarianToLibrary', userId=user.id)}}">Add to Library</a></p>
+        {%endif%}
+    </div>
+
+{%endblock %}

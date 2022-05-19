@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="xslobo07" default="build">
+  <!-- definice projektu default urcuje ktery target se spusti kdyz se antu nepreda nazev targetu-->
+  <property name="src.dir" location="src"/>
+  <!-- Definice promenne Hodi se aby byly vsechny modifikovatelne hodnoty na jednom miste -->
+  <property name="build.dir" location="build"/> <!-- slozka pro zkompilovane zdrojaky -->
+  <property name="dist.dir" location="dest"/> <!-- slozka pro vysledny jar -->
+  <property name="docs.dir" location="doc"/> <!-- slozka pro generaci dokumentace -->
+  <property name="lib.dir" location="lib"/> <!-- slozka s knihovnama -->
+  <property name="res.dir" location="data"/> <!-- napriklad fxml layout -->
+  <property name="jar.name" value="ija-app"/><!-- nazev vysledneho jar archivu -->
+
+  <path id="classpath">
+    <!-- definice elementu path se specifikovanym ID pro pozdejsi pouziti v classpath -->
+    <fileset dir="${lib.dir}">
+      <include name="**/*.jar"/>
+    </fileset>
+    <!-- pomoci neceho takoveho muzete do do emelentu path pridat vice cest. Treba vice cest do vsechn knihoven.-->
+
+  </path>
+
+
+  <target name="init">
+    <!-- vyvtareni souborove struktury-->
+    <mkdir dir="${build.dir}"/>
+    <mkdir dir="${dist.dir}"/>
+  </target>
+
+  <target name="clean">
+    <!-- mazani slozky pro clean -->
+    <delete includeemptydirs="true">
+      <fileset dir="${build.dir}" includes="**/*"/>
+      <fileset dir="${dist.dir}" includes="**/*"/>
+      <fileset dir="${docs.dir}" includes="**/*" excludes="**/architektura.pdf"/>
+    </delete>
+  </target>
+
+  <target name="build" depends="clean, init, docs">
+    <!-- depends zarucuje provedeni danych targetu pred provedenim targetu compile -->
+    <javac srcdir="${src.dir}" destdir="${build.dir}">
+      <!-- Samotna kompilace .java zdrojovych souboru ${src.dir} je odkaz na promennou a urcuje slozku se zdrojaky
+      destdir udava slozku pro zkompilovane .class soubory-->
+      <classpath>
+        <!-- classpath je neco jako promenna PATH. Udava ktere soubory jsou viditelne pro kompiler
+        je potreba tam mit vsechny pouzivane knihovny-->
+        <path refid="classpath" />
+        <!-- Reference na predem definovanou classpath -->
+      </classpath>
+    </javac>
+
+    <jar destfile="${dist.dir}\${jar.name}.jar" basedir="${build.dir}">
+      <!-- Zabalovani zkompilovanych souboru do jar archivu destfile udava kde se bude jar nachazet
+      basedir udava ze kdere slozku se bude vytvaret jar-->
+      <fileset dir="${res.dir}"/>
+      <!-- pridani resources souboru ze slozky s resources do jaru napriklad fxml layout -->
+      <manifest>
+        <!-- manifest = soubor s informacemi o souborech ulozenych v jaru -->
+        <attribute name="Main-Class" value="ija.ija2020.proj.Xkocal00Main"/>
+        <!-- Main-Class udava hlavni tridu aplikace. Hodnota je package tridy + nazev tridy-->
+      </manifest>
+      <zipgroupfileset dir="${lib.dir}" includes="**/*.jar"/>
+      <!-- Zkopirovani obsahu knihoven ve slozce s knihovnami do jaru. Je mozne to vyresit i jinym zpusobem napriklad
+       pridanim classpath obsahujici vsechny potrebne knihovny pro spusteni do java elementu v run targetu-->
+    </jar>
+  </target>
+
+  <target name="docs">
+    <!-- target pro generaci javadoc dokumentace -->
+    <javadoc sourcepath="${src.dir}" destdir="${docs.dir}">
+      <!-- sourcepath udava slozku se zdrojaky destdir je umisteni vygenerovane dokumentace -->
+      <classpath>
+        <!-- Generovani dokumentace potrebuje stejny classpath jako kompilace -->
+        <path refid="classpath"/>
+      </classpath>
+    </javadoc>
+  </target>
+
+  <target name="run">
+    <!-- target pro spusteni aplikace -->
+    <java jar="${dist.dir}/${jar.name}.jar" fork="true"/>
+    <!-- jar udava umisteni jaru pro spusteni fork udava ze se aplikace spusti v JVM odlisnem od toho, ve kterem bezi ant -->
+  </target>
+</project>

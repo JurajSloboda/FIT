@@ -1,0 +1,11 @@
+{% extends "base.html" %} {% import 'bootstrap/wtf.html' as wtf %} {%block app_content %}
+
+<h1>
+    Search all books
+</h1>
+
+{{ wtf.quick_form(form) }} {%for book in books%}
+<p>
+    <a href="{{url_for('books.showBook', bookId=book.id)}}">{{book.name}}</a>
+</p>
+{%endfor%} {%endblock %}

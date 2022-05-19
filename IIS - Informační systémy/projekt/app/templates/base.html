@@ -1,0 +1,58 @@
+{% extends 'bootstrap/base.html' %} {% block title %} Library {% endblock %} {% block styles %} {{super()}}
+<link rel="stylesheet" href="{{ url_for('static', filename='../static/styles/style.css') }}"> {% endblock %} {% block navbar %}
+
+<header class="header">
+    <h1>Library version 0.1</h1>
+    {% if current_user.is_authenticated %}
+    <p>
+        Welcome {{current_user.username}}
+    </p>
+    {% endif %} {% block header %}{% endblock %}
+</header>
+
+<!--Top Navigation-->
+<nav class="top-nav">
+    <a href="/index">Home</a> 
+    {% if current_user.is_authenticated %}
+      <span class="logged-in">Logged in as:   {{ current_user.username }}</span>
+      <a href="{{ url_for('users.userProfile', userId=current_user.id) }}">Profile</a>
+      <a href="{{ url_for('auth.logout') }}">Log Out</a> 
+    {% else %}
+      <a href="{{ url_for('auth.register') }}">Register</a>
+      <a href="{{ url_for('auth.login') }}">Log In</a> 
+    {% endif %}
+</nav>
+
+{% endblock %} {% block content %}
+
+<!--Flex Container-->
+<div class="flex-container">
+    <!--Side Navigation-->
+    <nav class="left-nav" ; style="flex-grow: 1">
+        {%block left_nav %} {% if current_user.is_authenticated %} {% if current_user.isAdmin() %}
+        <a href="{{url_for('library.addLibrary')}}">Add library</a>
+        <a href="{{url_for('users.allUsers')}}">All users</a> {%endif%} {% if current_user.isLibrarian() or current_user.isDistributor() %}
+        <a href="{{url_for('books.addBook')}}">Add book</a>
+        <a href="{{url_for('order.allOrders')}}">All book reservations</a> {%endif%} {% if current_user.isLibrarian() and current_user.hasLibrary() %}
+        <a href="{{url_for('library.inventory', libraryId=current_user.getIdOfWorkingLibrary())}}">Inventory of my Library</a> {%endif%} {% if current_user.isDistributor() %}
+        <a href="{{url_for('order.showLibraryOrders' )}}">Orders For Library</a> {%endif%}
+        <a href="{{url_for('books.myBooks', userId=current_user.id)}}">My Books and Reservations</a> {%endif%}
+        <a href="{{url_for('books.allBooks')}}">All books</a>
+        <a href="{{url_for('books.searchBooks')}}">Search books</a>
+        <a href="{{url_for('library.allLibraries')}}">All libraries</a> {% endblock %}
+    </nav>
+
+    <!--Main Website Body-->
+    <section class="content" ; style="flex-grow: 8">
+        <!--Flashed Messages-->
+        {% for message in get_flashed_messages() %}
+        <div class="flash">{{ message }}</div>
+        {% endfor %}
+
+        <!--Content Proper-->
+        {% block app_content %}{% endblock %}
+    </section>
+
+</div>
+
+{% endblock %}

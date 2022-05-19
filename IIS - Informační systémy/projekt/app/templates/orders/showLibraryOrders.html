@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+    
+{%block app_content %}
+    <h1>All Orders</h1>
+
+    <table>
+        {% for order in orders %}
+        <tr>
+            
+            <td><a href="{{url_for('order.showLibraryOrder', orderId=order.id)}}"> Order #{{order.id}}</a>
+        </tr>
+        {%endfor%}
+    </table>
+
+    
+{%endblock %}

@@ -1,0 +1,40 @@
+# Type a grammar here:
+
+<prog> -> <f.def> <prog>
+<prog> -> <stat> <prog>
+<f.def> -> def id ( <parlist> : EOL { <statlistdef>
+<statlist> -> <stat> <statlist>
+<statlist> -> }
+<parlist> -> id <parlist-n>
+<parlist> -> <parlist-n>
+<parlist-n> -> , id <parlist-n>
+<parlist-n> -> )
+<stat> -> id <id1>
+<stat> -> <exp> EOL
+<stat> -> if <exp> : EOL { <statlist> } else : EOL { <statlist>
+<stat> -> while <exp> : EOL { <statlist>
+<stat> -> pass EOL
+<termlist> -> <term> <termlist-n>
+<termlist> -> <termlist-n>
+<termlist-n> -> , <term> <termlist-n>
+<termlist-n> -> )
+<term> -> int EOL
+<term> -> float EOL
+<term> -> string EOL
+<term> -> none EOL
+<term> -> id EOL
+<id1> -> = <id2>
+<id1> -> EOL
+<id1> -> ( <termlist> EOL
+<id2> -> id ( <termlist> EOL
+<id2> -> <exp> EOL
+<return2> -> <exp> EOL
+<return2> -> EOL
+<statlistdef> -> <stat> <statlistdef>
+<statlistdef> -> }
+<statdef> -> id <id1>
+<statdef> -> <exp> EOL
+<statdef> -> if <exp> : EOL { <statlistdef> } else : EOL { <statlistdef>
+<statdef> -> while <exp> : EOL { <statlistdef>
+<statdef> -> return <return2>
+<statdef> -> pass EOL

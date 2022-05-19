@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{%block app_content %}
+
+    <p>
+        <b>Book:</b><br>
+        {{order.getBookName()}}
+    </p>
+    <p>
+        <b>Amount:</b><br>
+        {{order.amount}}
+    </p>
+
+    <p>
+        <a href="{{url_for('order.completeOrder', orderId=order.id)}}">Complete Order</a>    
+    </p>
+
+
+{%endblock %}

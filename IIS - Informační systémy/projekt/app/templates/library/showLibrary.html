@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{%block app_content %}
+    <h1>
+        {{library.name}}
+    </h1>
+
+    <p>
+        <b>Description:</b><br>
+        {{library.description}}<br>
+        <b>Address:</b>
+        {{library.address}}<br>
+        <b>Open:</b> {{library.openTime}}:00-{{library.closeTime}}:00<br>
+        
+    </p>
+
+    {%if current_user.isAdmin() %}
+        <p><a href="{{url_for('library.editLibrary',libraryName=library.name)}}">Edit Library</a></p>
+        <p><a href="{{url_for('library.deleteLibrary', libraryId=library.id)}}">Delete this Library</a></p>
+        <p><a href="{{url_for('library.inventory', libraryId=library.id)}}">Inventory</a></p>
+        <p><a href="{{url_for('library.allLibrarians', libraryId=library.id)}}">Librarians</a></p>
+    {%endif%}
+{%endblock %}

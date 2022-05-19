@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+    
+{%block app_content %}
+    <h1>My books and status</h1>
+    <table>
+        {% for book in books %}
+            <tr>
+                    
+                <td><a href="{{url_for('books.showBook', bookId=book.orderBookId)}}">{{book.getBookofOrder()}}</a></td>
+                <td>-{{book.status}}</td>
+            </tr>
+        {%endfor%}
+    <table>
+{%endblock %}

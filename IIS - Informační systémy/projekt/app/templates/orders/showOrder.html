@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{%block app_content %}
+
+    <p>
+        <b>Description:</b><br>
+        {{user}}
+    </p>
+    {% if book.isAvailable(current_user.id) %}
+        <a href="{{url_for('order.borrowBook', bookId=book.id)}}">Borrow book {{book.name}} to User</a>
+    {% endif %}
+{%endblock %}

@@ -1,0 +1,127 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=iso-8859-2"/>
+    <title>Projekt IIS</title>
+    <style type="text/css">
+    	table { border-collapse: collapse; }
+    	td, th { border: 1px solid black; padding: 0.3em 0.5em; text-align: left; }
+    	dt { font-weight: bold; margin-top: 0.5em; }
+    </style>
+</head>
+<body>
+
+<!-- Zkontrolujte pros�m nastaven� k�dov�n� v hlavi�ce dokumentu 
+     podle pou�it�ho editoru -->
+
+<h1>2. Knihovna: vyhledávání, rezervace, půjčování a objednávání kníh</h1> <!-- Nahradte n�zvem sv�ho zad�n� -->
+
+<dl>
+	<dt>Autori</dt>
+	<dd>Juraj Sloboda<!-- Nahra�te skute�n�m jm�nem a e-mailem autora a popisem �innosti -->
+	    <a href="mailto:xslobo07@stud.fit.vutbr.cz">xslobo07@stud.fit.vutbr.cz</a> -
+		Správa knižníc, kníh, dokumentácia
+	</dd>
+	<dd>Ondřej Dohnal <!-- Nahra�te skute�n�m jm�nem a e-mailem autora a popisem �innosti -->
+	    <a href="mailto:xdohna45@stud.fit.vutbr.cz">xdohna45@stud.fit.vutbr.cz</a> - 
+		Databáza, Hosting
+	</dd>
+  <dd>Marek Bahník <!-- Nahra�te skute�n�m jm�nem a e-mailem autora a popisem �innosti -->
+	    <a href="mailto:xbahni00@stud.fit.vutbr.cz">xbahni00@stud.fit.vutbr.cz</a> - 
+		Frontend, Správa užívatelov
+	</dd>
+	<dt>URL aplikace</dt>
+	<dd><a href="http://xslobo07iis21.herokuapp.com/">http://xslobo07iis21.herokuapp.com</a></dd>
+</dl>
+
+<h2>Uživatelé systému pro testování</h2>
+<table>
+<tr><th>Login</th><th>Heslo</th><th>Role</th></tr>
+<tr><td>admin</td><td>admin</td><td>Administrátor</td></tr>
+<tr><td>librarian</td><td>librarian</td><td>Knihovník</td></tr>
+<tr><td>distributor</td><td>distributor</td><td>Distribútor</td></tr>
+<tr><td>user</td><td>user</td><td>čtenář</td></tr>
+</table>
+ 
+
+<h2>Implementace</h2>
+<p>Informačný systém je implementovaný pomocou frameworku <i>Flask</i>, ktorý využíva tzv. <i>Views</i>, čo sú finkcie volané pri dotaze na určité URL</p>
+
+<p>Ak nie je povedané inak, nasledujúce súbory sú v adresári app/routes/</p>
+<ul>
+	<li><h3>Správa užívatelov</h3></li>
+	<ul>
+		<li><b>Prihlásenie</b>: auth.py view <code>login()</code></li>
+		<li><b>Registrácia</b>: auth.py view <code>register()</code></li>
+		<li><b>Zmazanie užívatela</b>: users.py view <code>deleteUser(username)</code></li>
+		<li><b>Odhlásenie</b>: auth.py view <code>logout()</code></li>
+	</ul>
+	
+	<li><h3>Profily užívateľov</h3></li>
+	<ul>
+		<li><b>Zobrazenie profilu užívateľa</b>: users.py view <code>userProfile(username)</code>. <br></li>
+		<li><b>Zobrazenie zoznamu užívateľov</b>: users.py view <code>showUsers()</code> (len pre admin rolu)</li>
+		<li><b>Zmena údajov</b>: users.py view <code>editUserProfile()</code> a <code>changePassword()</code></li>
+	</ul>
+
+	<li><h3>Správa Knižnice</h3></li>
+	<ul>
+		<li><b>Vytvorenie knižnice</b>: library.py view <code>addLibrary()</code>(len pre admin rolu)</li>
+		<li><b>Zmena údajov knižnice</b>: library.py view <code>editLibrary()</code>(len pre admin rolu)</li>
+		<li><b>Zmazanie knižnice</b>: library.py view <code>deleteLibrary()</code>(len pre admin rolu)</li>
+		<li><b>Zobrazie knižníc</b>: library.py view <code>allLibraries()</code></li>
+		<li><b>Zobrazenie informácií o knižnici</b>: library.py view <code>showLibrary()</code></li>
+		<li><b>Zobrazenie inventáru knižnice</b>: library.py view <code>inventory()</code></li>
+		<li><b>Zobrazenie knihovníkov v danej knižnici</b>: library.py view <code>allLibrarians()</code> </li>
+	</ul>
+
+	<li><h3>Správa kníh</h3></li>
+	<ul>
+		<li><b>Vytvorenie titulu</b>: book.py view <code>addBook()</code>(len pre knihovníka, admina a distribútora)</li>
+		<li><b>Zmena údajov titulu</b>: book.py view <code>editBook()</code>(len pre knihovníka, admina a distribútora)</li>
+		<li><b>Zmazanie titulu</b>: book.py view <code>deleteBook()</code>(len pre knihovníka, admina a distribútora)</li>
+		<li><b>Zobrazie titulov</b>: book.py view <code>allBooks()</code></li>
+		<li><b>Vyhľadávanie titulov</b>: book.py view <code>searchBooks()</code></li>
+		<li><b>Zobrazenie titulu, rezervácia, pridanie do knižnice, objednávka pre distribútora</b>: book.py view <code>showBook()</code>(rezervácia len pre registrovaných ak existuje kniha v niektorej knižnici, pridanie do knižnice a objednácka kníh len pre knihovníka a admina, ktorým je pridelená knižnica)</li>
+	</ul>
+</ul>
+
+<h3>Databáze</h3>
+<p>Aplikácia v produkčnom prostredí používa PostrgreSQL databázu na serveroch Heroku.</p>
+<p>Aplikácia samotná komunikuje s databázou pomocou ORM vytvoreného nástrojom <i>SQLAlchemy</i>.</p>
+<p> Migrácie databáz sú vytvorené nástrojom <i>Alembic</i></p>
+
+<img src="ERD.png" alt="ERD databáze">
+
+<h2>Instalace</h2>
+
+<ul>
+	<h3>Postup Inštalácie na Server</h3>
+	<li>Nastavte premenné prostredia:</li>
+	<ul>
+		<li><code><b>FLASK_APP</b>=app</code> : názov aplikácie pre flask.</li>
+		<li><code><b>FLASK_ENV</b>=production</code> : typ prostredia pre Flask</li>
+		<li><code><b>SECRET_KEY</b></code> : secret key.</li>
+		<li><code><b>APP_ENVIRONMENT</b>=production</code> : typ prostredia (production/development), ovplivňuje určité nastavenia, napr. logging level</li>
+		<li><code><b>DATABASE_URL</b></code> : url použitej databázy.</li>
+		<li><code><b>REMEMBER_COOKIE_DURATION</b></code> : Doba po ktorú sa bude udržiavať cookie o užívateľovi.</li>
+	</ul>
+	<li>Migrujte databázu pomocou nástroja Alembic</li>
+	<ol>
+		<li><code>flask db init</code> - Inicializuje podporu pre databázové migrácie. Tento príkaz je treba volať iba pred prvou migráciou.</li>
+		<li><code>flask db migrate</code> - Vytvorý migračný skrip automaticky z modelu definovaného v kóde</li>
+		<li><code>flask db upgrade</code> - Upgraduje databázu</li>
+	</ol>
+	<li>Spusťte aplikáciu pomocou príkazu <code>flask run</code></li>
+	<br>
+	<h3>Detaily pre Heroku</h3>
+	<p>
+		Aplikácie na Heroku využívajú tzv. Ephemeral Filesystem, čo znamená že úpravy súborov za behu aplikácie nemusia (a nebudú) permanentné.
+		Z tohto dôvodu je treba migračný skript pre databázu vytvoriť pred "pushnutím" aplikácie na heroku, a pri spustení aplikácie stačí vykonať upgrade.
+	</p>
+</ul>
+
+
+</body>
+</html>

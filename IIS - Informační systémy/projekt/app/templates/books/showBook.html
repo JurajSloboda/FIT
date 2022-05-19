@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{%block app_content %}
+    <h1>
+        {{book.name}}
+    </h1>
+
+    <p>
+        <b>Description:</b><br>
+        {{book.description}}<br>
+        <b>Authors:</b>
+        {{book.authors}}<br>
+        <b>Isbn:</b>
+        {{book.isbn}}<br>
+        <b>Release:</b>
+        {{book.year}}<br>
+        <b>Rating:</b>
+        {{book.rating}}<br>
+        <b>Publisher:</b>
+        {{book.publisher}}<br>
+        <b>Votes Up:</b>
+        {{book.getVotes()}}<br>
+    </p>
+
+    <p>
+        <b>Is in inventory of</b><br>
+        {{book.getLibraryName()}}
+    </p>
+    {%if current_user.is_authenticated%}
+        {%if current_user.isLibrarian() or current_user.isDistributor() %}
+            {%if current_user.isAdmin() %}
+                {%for user in orderedby%}
+                <p>
+                    <a href="{{ url_for('users.userProfile', userId=user.id) }}">{{user.username}}</a>
+                </p>
+                {%endfor%}
+            {%else%}
+                {%for user in orderedby%}
+                <p>
+                    <a> {{user.username}} </a>
+                </p>
+                {%endfor%}
+            {%endif%}
+            {%if current_user.isLibrarian() and current_user.hasLibrary() %}
+                <p>
+                    <a href="{{ url_for('books.addToMyLibrary', libraryId=current_user.getIdOfWorkingLibrary(), bookId = book.id) }}">Add to my Library</a>
+                </p>
+                {{ wtf.quick_form(orderForm) }}
+            {%endif%}
+            <p><a href="{{url_for('books.editBook',bookId=book.id)}}">Edit Book</a></p>
+            <p><a href="{{url_for('books.deleteBook', bookId=book.id)}}">Delete this Book</a></p>
+        {%endif%}
+        
+        <p><a href="{{url_for('users.voteForBook', bookId=book.id)}}">Vote for this Book </a></p>
+    {%endif%}
+    {%if book.hasLibrary()%}
+        {{ wtf.quick_form(form) }}
+    {%endif%}
+{%endblock %}
